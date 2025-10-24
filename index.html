@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ja" id="html-root">
+<head>
+    <meta charset="UTF-8">
+    <title id="page-title">トミの世界</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 引入最新版本的 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #374151;
+            --secondary-color: #1F2937;
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background: linear-gradient(to bottom, #F9FAFB, #F3F4F6, #E5E7EB, #D1D5DB);
+            background-attachment: fixed;
+            position: relative;
+            color: var(--text-primary);
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            max-width: 600px;
+            margin: 20px auto;
+            z-index: 2;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .section {
+            margin: 2.5rem 0;
+            padding: 1.5rem;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #374151, #4B5563);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .skill-tag {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            margin: 0.5rem;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .skill-tag:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .social-links {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 24px;
+            padding: 0;
+            margin-top: 2rem;
+        }
+
+        .social-links li {
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .social-links li:hover {
+            transform: translateY(-5px);
+        }
+
+        .social-links a {
+            display: block;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-links img {
+            width: 40px;
+            height: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .social-links a:hover img {
+            transform: scale(1.1);
+        }
+
+        .social-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+            margin-bottom: 8px;
+            backdrop-filter: blur(5px);
+        }
+
+        .social-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+        }
+
+        .social-links li:hover .social-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
+        }
+
+        .button {
+            padding: 12px 28px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(31, 41, 55, 0.2);
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, #374151, #4B5563);
+            transform-origin: 0 50%;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        @media (max-width: 640px) {
+            .content {
+                padding: 24px;
+                max-width: 95%;
+                margin: 10px auto;
+            }
+            
+            .section {
+                margin: 1.5rem 0;
+                padding: 1.25rem;
+            }
+
+            .skill-tag {
+                padding: 0.5rem 1rem;
+                margin: 0.25rem;
+                font-size: 0.8rem;
+            }
+            
+            h1 {
+                font-size: 1.75rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            h2 {
+                font-size: 1.25rem;
+                margin-bottom: 1rem;
+            }
+            
+            p {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+
+            .social-links {
+                gap: 16px;
+            }
+
+            .social-links img {
+                width: 36px;
+                height: 36px;
+            }
+        }
+
+        /* 动画类 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInMove 1.5s ease-out forwards;
+        }
+
+        @keyframes fadeInMove {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .avatar-enter {
+            opacity: 0;
+            transform: translateY(100%) scale(0.8);
+            animation: rollIn 1.5s forwards;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes rollIn {
+            0% {
+                transform: translateY(100%) scale(0.8);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* 添加平滑滚动 */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <!-- 进度条 -->
+    <div class="progress-bar" id="progress-bar"></div>
+    <!-- 语言选择下拉菜单，z-index极高防止被遮挡 -->
+    <div class="fixed top-4 right-4" id="lang-select-wrapper" style="z-index:9999;">
+      <button id="toggle-lang" class="button px-4 py-2 text-base sm:px-7 sm:py-3 sm:text-lg" type="button">日本語 ▼</button>
+      <ul id="lang-menu" class="hidden absolute right-0 mt-2 bg-white rounded shadow text-gray-800 min-w-[100px]">
+        <li class="lang-option px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="ja">日本語</li>
+        <li class="lang-option px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="cn">中文</li>
+        <li class="lang-option px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="en">English</li>
+      </ul>
+    </div>
+
+    <!-- 内容容器 -->
+    <div class="container">
+        <div class="content fade-in">
+            <img class="rounded-full mx-auto my-6 hover-scale avatar-enter"
+                 src="./tomi/per1.png" alt="Avatar of YT" width="192" height="192" loading="lazy">
+
+            <h1 class="text-gradient mb-4 fade-in" style="animation-delay: 1s;" id="main-title">こんにちは</h1>
+            <!-- 今日の気分 动态心情区块 -->
+            <div class="section fade-in" style="animation-delay: 1.1s;">
+                <h2 class="text-xl font-semibold mb-4" id="mood-title">今日の気分</h2>
+                <div id="mood" class="mb-2 text-lg font-medium"></div>
+            </div>
+            <!-- 关于我 -->
+            <div class="section fade-in" style="animation-delay: 1.2s;">
+                <h2 class="text-xl font-semibold mb-4" id="about-title">自己紹介</h2>
+                <p class="mb-3" id="about-1">大阪在住、日本語が苦手です</p>
+                <p class="mb-3" id="about-2">既婚、二児の父。</p>
+                <p class="mb-3" id="about-3">今、仕事を探しています</p>
+            </div>
+            <!-- 技能标签 -->
+            <div class="section fade-in" style="animation-delay: 1.4s;">
+                <h2 class="text-xl font-semibold mb-4" id="skills-title">スキルと趣味</h2>
+                <div class="flex flex-wrap justify-center gap-2">
+                    <span class="skill-tag" id="skill-1">旅行</span>
+                    <span class="skill-tag" id="skill-2">読書</span>
+                    <span class="skill-tag" id="skill-3">AI・機械学習</span>
+                    <span class="skill-tag" id="skill-4">ウェブ開発</span>
+                    <span class="skill-tag" id="skill-5">ブロックチェーン・Web3</span>
+                    <span class="skill-tag" id="skill-6">アニメ・マンガ</span>
+                    <span class="skill-tag" id="skill-7">写真撮影</span>
+                    <span class="skill-tag" id="skill-8">音楽</span>
+                </div>
+            </div>
+            <!-- 联系方式 -->
+            <div class="section fade-in" style="animation-delay: 1.6s;">
+                <h2 class="text-xl font-semibold mb-4" id="contact-title">連絡先</h2>
+                <button id="qr-email" class="button mb-4">メールQRコード</button>
+                <div id="qr-container" class="hidden mt-4 flex justify-center">
+                    <canvas id="qr-code"></canvas>
+                </div>
+            </div>
+
+            <!-- 社交链接 -->
+            <ul class="social-links fade-in grid grid-cols-5 gap-6 justify-center" style="animation-delay: 1.8s;">
+                <li>
+                    <a href="https://ok.link" target="_blank" rel="noopener noreferrer" aria-label="Ok.Link">
+                        <img src="./tomi/oklink.png" alt="Ok.Link" width="40" height="40">
+                        <span class="social-tooltip">Ok.Link</span>
+                    </a>
+                </li>
+                   <li>
+                    <a href="https://keki.ai" target="_blank" rel="noopener noreferrer" aria-label="kekiai">
+                        <img src="./tomi/keki.png" alt="kekiai" width="40" height="40">
+                        <span class="social-tooltip">keki.ai</span>
+                    </a>
+                  <li>
+                    <a href="https://wecv.ai" target="_blank" rel="noopener noreferrer" aria-label="wecvai">
+                        <img src="./tomi/wecv.png" alt="wecvai" width="40" height="40">
+                        <span class="social-tooltip">WeCV AI</span>
+                    </a>
+                </li> 
+                   <li>
+                    <a href="https://ai800.com" target="_blank" rel="noopener noreferrer" aria-label="ai800">
+                        <img src="./tomi/8.png" alt="ai800" width="40" height="40">
+                        <span class="social-tooltip">ai800.com</span>
+                    </a>
+                </li>
+                  <li>
+                    <a href="https://xqt.io" target="_blank" rel="noopener noreferrer" aria-label="xqt.io">
+                        <img src="./tomi/xqt.png" alt="xqt.io" width="40" height="40">
+                        <span class="social-tooltip">xqt.io</span>
+                    </a>
+                </li>
+                </li>
+                <li>
+                    <a href="https://www.longan.ai" target="_blank" rel="noopener noreferrer" aria-label="Longanai">
+                        <img src="./tomi/longan.png" alt="longanai" width="40" height="40">
+                        <span class="social-tooltip">LongAn AI</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.zhuji123.com" target="_blank" rel="noopener noreferrer" aria-label="Zhuji123">
+                        <img src="./tomi/zhuji.png" alt="Zhuji123" width="40" height="40">
+                        <span class="social-tooltip">Zhuj</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 将樱花花瓣飘落的 Canvas 放在内容容器之后 -->
+    <canvas id="sakura-canvas"></canvas>
+
+    <!-- 引入 qrious 库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 动态心情内容
+        const moodsData = {
+            ja: [
+                '七回転んで、八回目はもう起きなくてもいいや。',
+                '失敗ばっかだけど、成功とかもう興味ないかも。',
+                '転んでも、まあ…どうせ起きてもまた転ぶし。',
+                '雨降っても、地が固まる前に心が折れた。',
+                'なるようにしかならないし、別にならなくてもいい。',
+                '明けない夜？まあ、もう朝なんて来なくてもいいかもね。',
+                'どうにかなる…って言いながらもう何年経ったっけ。',
+                '流れる水は腐らないらしいけど、自分はとっくに濁ってる。',
+                '待てば来るって？待ちすぎて季節が変わったわ。',
+                '笑えば福が来る？来ないけど笑ってるよ、癖でね。',
+                '風が吹いても、桶屋どころか自分も飛ばされるだけ。',
+                '出る杭は打たれるから、最初から出る気もない。',
+                '大丈夫じゃないけど、大丈夫なふりをしているだけ。',
+                'なるようになるさ。',
+                '挑戦は失敗への第一歩。',
+                '疲れてるのに、頭だけ冴えてる。'
+            ],
+            en: [
+                "When it rains, it pours.",
+                "Born under a bad sign.",
+                "If it weren’t for bad luck, I’d have no luck at all.",
+                "I’m not lazy, I’m just on energy-saving mode.",
+                "Another day, another disappointment.",
+                "I used to have goals… now I just hope for decent Wi-Fi.",
+                "I’m fine.",
+                "Just keep smiling and pretend everything’s okay.",
+                "Life’s a bitch, and then you die.",
+                "Whatever can go wrong, will go wrong.",
+                "You win some, you lose most.",
+                "Not my circus, not my monkeys.",
+                "I’m not okay, but I’ll pretend until I am.",
+                "It is what it is.",
+                "Trying is the first step toward failure.",
+                "Tired but wired."
+            ],
+            cn: [
+                '活着就已经拼尽全力了。',
+                '摆烂是我目前最擅长的事。',
+                '一路走来，输得也挺有经验了。',
+                '梦想没变小，只是我变得现实了。',
+                '有些事不是不在意，是在意了也没用。',
+                '累到极致也不会哭了，只会静静发呆。',
+                '能力配不上野心，懒又治不好焦虑。',
+                '并不是不想翻身，只是被子太暖了。',
+                '忍一时越想越气，退一步越想越亏。',
+                '熬过去是故事，熬不过去就是事故。',
+                '看开了，也就懒得争了。',
+                '做什么都没劲，但什么都不做更没劲。',
+                '人间不值得，但我也还没死。',
+                '不怕生活没希望，就怕你还抱有希望。',
+                '明天会不会更好不知道，但今天是真的累了。',
+                '失败多了，也就不怕了。'
+            ]
+        };
+        function getRandomIndex(arr) {
+            return Math.floor(Math.random() * arr.length);
+        }
+        function setMood() {
+            document.getElementById('mood').innerText = moodsData[currentLang][getRandomIndex(moodsData[currentLang])];
+        }
+
+        // 多语言内容
+        const langData = {
+            en: {
+                lang: 'en',
+                mainTitle: 'Hello',
+                moodTitle: "Today's Mood",
+                aboutTitle: 'About Me',
+                about1: 'Living in Osaka/Japan, Poor in Japanese',
+                about2: 'Married, Father of two children.',
+                about3: 'Currently looking for a job',
+                skillsTitle: 'Skills and Hobbies',
+                skill1: 'Travel',
+                skill2: 'Reading',
+                skill3: 'AI/ML',
+                skill4: 'Web Development',
+                skill5: 'Blockchain & Web3',
+                skill6: 'Anime & Manga',
+                skill7: 'Photography',
+                skill8: 'Music',
+                contactTitle: 'Contact Me',
+                qrBtn: 'Get Email QR Code',
+                pageTitle: "Tomi's World"
+            },
+            ja: {
+                lang: 'ja',
+                mainTitle: 'こんにちは',
+                moodTitle: '今日の気分',
+                aboutTitle: '自己紹介',
+                about1: '大阪在住、日本語が苦手です',
+                about2: '既婚、二児の父。',
+                about3: '今、仕事を探しています',
+                skillsTitle: 'スキルと趣味',
+                skill1: '旅行',
+                skill2: '読書',
+                skill3: 'AI・機械学習',
+                skill4: 'ウェブ開発',
+                skill5: 'ブロックチェーン・Web3',
+                skill6: 'アニメ・マンガ',
+                skill7: '写真撮影',
+                skill8: '音楽',
+                contactTitle: '連絡先',
+                qrBtn: 'メールQRコード',
+                pageTitle: 'トミの世界'
+            },
+            cn: {
+                lang: 'zh',
+                mainTitle: '你好',
+                moodTitle: '今日心情',
+                aboutTitle: '关于我',
+                about1: '住在日本大阪，日语很差',
+                about2: '已婚，两个孩子的爸爸。',
+                about3: '现在正在找工作',
+                skillsTitle: '技能与兴趣',
+                skill1: '旅行',
+                skill2: '阅读',
+                skill3: 'AI/机器学习',
+                skill4: 'Web开发',
+                skill5: '区块链与Web3',
+                skill6: '动漫&漫画',
+                skill7: '摄影',
+                skill8: '音乐',
+                contactTitle: '联系方式',
+                qrBtn: '获取邮箱二维码',
+                pageTitle: 'Tomi的世界'
+            }
+        };
+        const langNames = { ja: '日本語', cn: '中文', en: 'English' };
+        let currentLang = 'ja';
+        const toggleLangBtn = document.getElementById('toggle-lang');
+        const langMenu = document.getElementById('lang-menu');
+
+        // 初始化页面内容和按钮
+        function setLang(lang) {
+            currentLang = lang;
+            const d = langData[currentLang];
+            document.getElementById('html-root').setAttribute('lang', d.lang);
+            toggleLangBtn.innerText = langNames[currentLang] + ' ▼';
+            const idMap = [
+                ['main-title', d.mainTitle],
+                ['mood-title', d.moodTitle],
+                ['about-title', d.aboutTitle],
+                ['about-1', d.about1],
+                ['about-2', d.about2],
+                ['about-3', d.about3],
+                ['skills-title', d.skillsTitle],
+                ['skill-1', d.skill1],
+                ['skill-2', d.skill2],
+                ['skill-3', d.skill3],
+                ['skill-4', d.skill4],
+                ['skill-5', d.skill5],
+                ['skill-6', d.skill6],
+                ['skill-7', d.skill7],
+                ['skill-8', d.skill8],
+                ['contact-title', d.contactTitle],
+                ['qr-email', d.qrBtn],
+                ['page-title', d.pageTitle]
+            ];
+            idMap.forEach(([id, val]) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.innerText = val;
+                }
+            });
+            setMood();
+            document.title = d.pageTitle;
+        }
+
+        // 显示/隐藏菜单
+        toggleLangBtn.onclick = function(e) {
+            e.stopPropagation();
+            langMenu.classList.toggle('hidden');
+            document.querySelectorAll('.lang-option').forEach(opt => {
+                if(opt.dataset.lang === currentLang) {
+                    opt.classList.add('bg-gray-200','font-bold');
+                } else {
+                    opt.classList.remove('bg-gray-200','font-bold');
+                }
+            });
+        };
+
+        // 切换语言
+        document.querySelectorAll('.lang-option').forEach(opt => {
+            opt.onclick = function(e) {
+                e.stopPropagation();
+                setLang(this.dataset.lang);
+                langMenu.classList.add('hidden');
+            }
+        });
+
+        // 点击页面其他地方关闭菜单
+        document.body.addEventListener('click', function(){
+            langMenu.classList.add('hidden');
+        });
+
+        // 页面加载时初始化为日语
+        setLang('ja');
+    });
+    </script>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 页面加载进度条
+    window.addEventListener('load', () => {
+        const progressBar = document.getElementById('progress-bar');
+        progressBar.style.transform = 'scaleX(1)';
+        setTimeout(() => {
+            progressBar.style.transform = 'scaleX(0)';
+        }, 1000);
+    });
+
+    // QR 码处理
+    document.getElementById('qr-email').addEventListener('click', function () {
+        const qrContainer = document.getElementById('qr-container');
+        qrContainer.classList.toggle('hidden');
+
+        if (!qrContainer.classList.contains('hidden')) {
+            new QRious({
+                element: document.getElementById('qr-code'),
+                value: 'mailto:hi@tomi.io',
+                size: 200,
+            });
+        }
+    });
+
+    // 添加页面滚动进度
+    window.addEventListener('scroll', () => {
+        const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        document.getElementById('progress-bar').style.transform = `scaleX(${scrolled / 100})`;
+    });
+});
+</script>
+</body>
+</html>
