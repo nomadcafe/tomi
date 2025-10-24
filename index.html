@@ -35,7 +35,7 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 80px 20px 20px;
             position: relative;
             z-index: 1;
         }
@@ -317,6 +317,82 @@
             font-weight: 500;
         }
 
+        /* 微妙的动画效果 */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 导航栏样式 */
+        nav {
+            transition: all 0.3s ease;
+        }
+
+        /* 改进的卡片阴影 */
+        .content {
+            transition: all 0.3s ease;
+        }
+
+        .content:hover {
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        /* 页脚链接悬停效果 */
+        footer a {
+            position: relative;
+        }
+
+        footer a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #667eea;
+            transition: width 0.3s ease;
+        }
+
+        footer a:hover::after {
+            width: 100%;
+        }
+
+        /* 平滑滚动到顶部 */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
         /* 响应式优化 */
         @media (max-width: 768px) {
             .content {
@@ -331,21 +407,42 @@
             .section {
                 padding: 1.5rem;
             }
+
+            nav {
+                padding: 12px 16px;
+            }
+
+            .container {
+                padding: 100px 20px 20px;
+            }
         }
     </style>
 </head>
 <body>
     <!-- 进度条 -->
     <div class="progress-bar" id="progress-bar"></div>
-    <!-- 语言选择下拉菜单，z-index极高防止被遮挡 -->
-    <div class="fixed top-4 right-4" id="lang-select-wrapper" style="z-index:9999;">
-      <button id="toggle-lang" class="button px-4 py-2 text-base sm:px-7 sm:py-3 sm:text-lg" type="button">日本語 ▼</button>
-      <ul id="lang-menu" class="hidden absolute right-0 mt-2 bg-white rounded shadow text-gray-800 min-w-[100px]">
-        <li class="lang-option px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="ja">日本語</li>
-        <li class="lang-option px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="cn">中文</li>
-        <li class="lang-option px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="en">English</li>
-      </ul>
+    
+    <!-- 加载动画 -->
+    <div id="loading-screen" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+        <div class="text-center">
+            <div class="w-12 h-12 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
+            <p class="text-gray-600 font-medium">Loading...</p>
+        </div>
     </div>
+    <!-- 现代化导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="text-lg font-semibold text-gray-800">Tomi</div>
+        <div class="flex items-center space-x-4">
+          <button id="toggle-lang" class="text-sm font-medium text-gray-600 hover:text-gray-800 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors" type="button">日本語 ▼</button>
+          <ul id="lang-menu" class="hidden absolute right-4 top-12 bg-white rounded-lg shadow-lg border border-gray-100 text-gray-800 min-w-[120px] py-2">
+            <li class="lang-option px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm" data-lang="ja">日本語</li>
+            <li class="lang-option px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm" data-lang="cn">中文</li>
+            <li class="lang-option px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm" data-lang="en">English</li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
     <!-- 内容容器 -->
     <div class="container">
@@ -437,6 +534,20 @@
         </div>
     </div>
 
+    <!-- 现代化页脚 -->
+    <footer class="bg-gray-50 border-t border-gray-100 py-8 mt-16">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div class="text-sm text-gray-500">
+                © 2025 Tomi. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- 回到顶部按钮 -->
+    <button id="scroll-to-top" class="scroll-to-top" title="回到顶部">
+        ↑
+    </button>
+
     <!-- 将樱花花瓣飘落的 Canvas 放在内容容器之后 -->
     <canvas id="sakura-canvas"></canvas>
 
@@ -444,6 +555,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 
     <script>
+    // 隐藏加载动画
+    window.addEventListener('load', function() {
+        setTimeout(() => {
+            document.getElementById('loading-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('loading-screen').style.display = 'none';
+            }, 300);
+        }, 500);
+    });
+
     document.addEventListener('DOMContentLoaded', function() {
         // 动态心情内容
         const moodsData = {
@@ -622,9 +743,9 @@
             langMenu.classList.toggle('hidden');
             document.querySelectorAll('.lang-option').forEach(opt => {
                 if(opt.dataset.lang === currentLang) {
-                    opt.classList.add('bg-gray-200','font-bold');
+                    opt.classList.add('bg-blue-50','font-semibold');
                 } else {
-                    opt.classList.remove('bg-gray-200','font-bold');
+                    opt.classList.remove('bg-blue-50','font-semibold');
                 }
             });
         };
@@ -673,10 +794,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 添加页面滚动进度
+    // 添加页面滚动进度和回到顶部按钮
     window.addEventListener('scroll', () => {
         const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
         document.getElementById('progress-bar').style.transform = `scaleX(${scrolled / 100})`;
+        
+        // 显示/隐藏回到顶部按钮
+        const scrollToTopBtn = document.getElementById('scroll-to-top');
+        if (window.scrollY > 300) {
+            scrollToTopBtn.classList.add('visible');
+        } else {
+            scrollToTopBtn.classList.remove('visible');
+        }
+    });
+
+    // 回到顶部功能
+    document.getElementById('scroll-to-top').addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     });
 });
 </script>
