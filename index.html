@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- 引入最新版本的 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -22,12 +22,12 @@
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             overflow-x: hidden;
-            background: linear-gradient(to bottom, #F9FAFB, #F3F4F6, #E5E7EB, #D1D5DB);
-            background-attachment: fixed;
+            background: #ffffff;
             position: relative;
-            color: var(--text-primary);
+            color: #1a1a1a;
+            line-height: 1.6;
         }
 
         .container {
@@ -42,55 +42,57 @@
 
         .content {
             position: relative;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            padding: 40px;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 48px;
             text-align: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            max-width: 600px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            max-width: 680px;
             margin: 20px auto;
             z-index: 2;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid #f0f0f0;
         }
 
         .section {
-            margin: 2.5rem 0;
-            padding: 1.5rem;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin: 2rem 0;
+            padding: 2rem;
+            border-radius: 12px;
+            background: #fafafa;
+            border: 1px solid #e8e8e8;
+            transition: all 0.3s ease;
         }
 
         .section:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border-color: #d0d0d0;
         }
 
         .text-gradient {
-            background: linear-gradient(to right, #374151, #4B5563);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .skill-tag {
             display: inline-block;
-            padding: 0.75rem 1.5rem;
-            margin: 0.5rem;
-            border-radius: 9999px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(5px);
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border-radius: 8px;
+            background: #f8f9fa;
             font-size: 0.875rem;
+            font-weight: 500;
             transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid #e9ecef;
+            color: #495057;
         }
 
         .skill-tag:hover {
-            transform: translateY(-2px);
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transform: translateY(-1px);
+            background: #e9ecef;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: #dee2e6;
         }
 
         .social-links {
@@ -115,15 +117,16 @@
         .social-links a {
             display: block;
             padding: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
-            border-radius: 16px;
+            background: #f8f9fa;
+            border-radius: 12px;
             transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
         }
 
         .social-links a:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: #e9ecef;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            border-color: #dee2e6;
         }
 
         .social-links img {
@@ -171,22 +174,23 @@
         }
 
         .button {
-            padding: 12px 28px;
-            background-color: var(--primary-color);
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border-radius: 12px;
+            border-radius: 8px;
             text-decoration: none;
             transition: all 0.3s ease;
             border: none;
             cursor: pointer;
             font-weight: 500;
-            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         }
 
         .button:hover {
-            background-color: var(--secondary-color);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(31, 41, 55, 0.2);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
         }
 
         .progress-bar {
@@ -195,7 +199,7 @@
             left: 0;
             width: 100%;
             height: 3px;
-            background: linear-gradient(to right, #374151, #4B5563);
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
             transform-origin: 0 50%;
             transform: scaleX(0);
             transition: transform 0.3s ease;
@@ -284,6 +288,49 @@
         /* 添加平滑滚动 */
         html {
             scroll-behavior: smooth;
+        }
+
+        /* 现代化改进 */
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+
+        p {
+            color: #4a5568;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* 语言选择按钮优化 */
+        #toggle-lang {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* 响应式优化 */
+        @media (max-width: 768px) {
+            .content {
+                padding: 32px 24px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
