@@ -780,15 +780,35 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 1000);
     });
 
-    // QR 码处理
+    // 安全邮箱地址配置（硬编码常量，防止被篡改或注入）
+    const CONTACT_EMAIL = 'hi@tomi.io';
+    
+    // 邮箱地址验证函数（防止注入攻击）
+    function validateEmail(email) {
+        // 只允许字母、数字、@、.、-、_字符，防止恶意代码注入
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return emailRegex.test(email) && email.length <= 100; // 限制长度防止DoS
+    }
+    
+    // QR 码处理（安全版本）
     document.getElementById('qr-email').addEventListener('click', function () {
         const qrContainer = document.getElementById('qr-container');
         qrContainer.classList.toggle('hidden');
 
         if (!qrContainer.classList.contains('hidden')) {
+            // 验证邮箱地址格式，防止恶意注入
+            if (!validateEmail(CONTACT_EMAIL)) {
+                console.error('Invalid email address format');
+                return; // 如果邮箱格式无效，不生成QR码
+            }
+            
+            // 安全地构建mailto链接（使用硬编码的邮箱地址）
+            const mailtoLink = 'mailto:' + CONTACT_EMAIL;
+            
+            // 生成QR码（QRious会自动处理canvas）
             new QRious({
                 element: document.getElementById('qr-code'),
-                value: 'mailto:hi@tomi.io',
+                value: mailtoLink,
                 size: 200,
             });
         }
