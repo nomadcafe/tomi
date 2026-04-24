@@ -1,0 +1,13 @@
+{
+  "name": "tomi",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Tomi's personal homepage.",
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/tailwind.css -o ./tomi/tailwind.css --minify",
+    "watch:css": "tailwindcss -i ./src/tailwind.css -o ./tomi/tailwind.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}

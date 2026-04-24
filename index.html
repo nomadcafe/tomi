@@ -5,8 +5,7 @@
     <title id="page-title">トミの世界</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="./tomi/per1.png">
-    <!-- 引入最新版本的 Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./tomi/tailwind.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -203,49 +202,6 @@
             z-index: 1000;
         }
 
-        @media (max-width: 640px) {
-            .content {
-                padding: 24px;
-                max-width: 95%;
-                margin: 10px auto;
-            }
-            
-            .section {
-                margin: 1.5rem 0;
-                padding: 1.25rem;
-            }
-
-            .skill-tag {
-                padding: 0.5rem 1rem;
-                margin: 0.25rem;
-                font-size: 0.8rem;
-            }
-            
-            h1 {
-                font-size: 1.75rem;
-                margin-bottom: 1.5rem;
-            }
-            
-            h2 {
-                font-size: 1.25rem;
-                margin-bottom: 1rem;
-            }
-            
-            p {
-                font-size: 0.95rem;
-                line-height: 1.6;
-            }
-
-            .social-links {
-                gap: 16px;
-            }
-
-            .social-links img {
-                width: 36px;
-                height: 36px;
-            }
-        }
-
         /* 动画类 */
         .fade-in {
             opacity: 0;
@@ -390,17 +346,17 @@
             transform: translateY(-2px);
         }
 
-        /* 响应式优化 */
+        /* 响应式优化：平板 */
         @media (max-width: 768px) {
             .content {
                 padding: 32px 24px;
                 margin: 10px;
             }
-            
+
             h1 {
                 font-size: 2rem;
             }
-            
+
             .section {
                 padding: 1.5rem;
             }
@@ -411,6 +367,50 @@
 
             .container {
                 padding: 100px 20px 20px;
+            }
+        }
+
+        /* 响应式优化：手机（需在平板规则之后以确保覆盖） */
+        @media (max-width: 640px) {
+            .content {
+                padding: 24px;
+                max-width: 95%;
+                margin: 10px auto;
+            }
+
+            .section {
+                margin: 1.5rem 0;
+                padding: 1.25rem;
+            }
+
+            .skill-tag {
+                padding: 0.5rem 1rem;
+                margin: 0.25rem;
+                font-size: 0.8rem;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+                margin-bottom: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.25rem;
+                margin-bottom: 1rem;
+            }
+
+            p {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+
+            .social-links {
+                gap: 16px;
+            }
+
+            .social-links img {
+                width: 36px;
+                height: 36px;
             }
         }
     </style>
@@ -758,35 +758,14 @@
         // 页面加载时初始化为日语
         setLang('ja');
 
-        // 安全邮箱地址配置（硬编码常量，防止被篡改或注入）
-        const CONTACT_EMAIL = 'hi@tomi.io';
-
-        // 邮箱地址验证函数（防止注入攻击）
-        function validateEmail(email) {
-            // 只允许字母、数字、@、.、-、_字符，防止恶意代码注入
-            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            return emailRegex.test(email) && email.length <= 100; // 限制长度防止DoS
-        }
-
-        // QR 码处理（安全版本）
+        // QR 码：点击显示邮箱
         document.getElementById('qr-email').addEventListener('click', function () {
             const qrContainer = document.getElementById('qr-container');
             qrContainer.classList.toggle('hidden');
-
             if (!qrContainer.classList.contains('hidden')) {
-                // 验证邮箱地址格式，防止恶意注入
-                if (!validateEmail(CONTACT_EMAIL)) {
-                    console.error('Invalid email address format');
-                    return; // 如果邮箱格式无效，不生成QR码
-                }
-
-                // 安全地构建mailto链接（使用硬编码的邮箱地址）
-                const mailtoLink = 'mailto:' + CONTACT_EMAIL;
-
-                // 生成QR码（QRious会自动处理canvas）
                 new QRious({
                     element: document.getElementById('qr-code'),
-                    value: mailtoLink,
+                    value: 'mailto:hi@tomi.io',
                     size: 200,
                 });
             }
