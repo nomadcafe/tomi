@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title id="page-title">トミの世界</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="./tomi/per1.png">
     <!-- 引入最新版本的 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -443,7 +444,7 @@
     <!-- 内容容器 -->
     <div class="container">
         <div class="content fade-in">
-            <img class="rounded-full mx-auto my-6 hover-scale avatar-enter"
+            <img class="rounded-full mx-auto my-6 avatar-enter"
                  src="./tomi/per1.png" alt="Avatar of YT" width="192" height="192" loading="lazy">
 
             <h1 class="text-gradient mb-4 fade-in" style="animation-delay: 1s;" id="main-title">こんにちは</h1>
@@ -483,7 +484,7 @@
             </div>
 
             <!-- 社交链接 -->
-            <ul class="social-links fade-in grid grid-cols-4 gap-6 justify-center" style="animation-delay: 1.8s;">
+            <ul class="social-links fade-in" style="animation-delay: 1.8s;">
                 <li>
                     <a href="https://keki.ai" target="_blank" rel="noopener noreferrer" aria-label="kekiai">
                         <img src="./tomi/keki.png" alt="kekiai" width="40" height="40">
@@ -550,12 +551,9 @@
     <script>
     // 隐藏加载动画
     window.addEventListener('load', function() {
-        setTimeout(() => {
-            document.getElementById('loading-screen').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('loading-screen').style.display = 'none';
-            }, 300);
-        }, 500);
+        const loading = document.getElementById('loading-screen');
+        loading.style.opacity = '0';
+        setTimeout(() => { loading.style.display = 'none'; }, 300);
     });
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -668,7 +666,7 @@
                 pageTitle: 'トミの世界'
             },
             cn: {
-                lang: 'zh',
+                lang: 'zh-CN',
                 mainTitle: '你好',
                 moodTitle: '今日心情',
                 aboutTitle: '关于我',
@@ -759,76 +757,63 @@
 
         // 页面加载时初始化为日语
         setLang('ja');
-    });
-    </script>
 
-    <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // 页面加载进度条
-    window.addEventListener('load', () => {
-        const progressBar = document.getElementById('progress-bar');
-        progressBar.style.transform = 'scaleX(1)';
-        setTimeout(() => {
-            progressBar.style.transform = 'scaleX(0)';
-        }, 1000);
-    });
+        // 安全邮箱地址配置（硬编码常量，防止被篡改或注入）
+        const CONTACT_EMAIL = 'hi@tomi.io';
 
-    // 安全邮箱地址配置（硬编码常量，防止被篡改或注入）
-    const CONTACT_EMAIL = 'hi@tomi.io';
-    
-    // 邮箱地址验证函数（防止注入攻击）
-    function validateEmail(email) {
-        // 只允许字母、数字、@、.、-、_字符，防止恶意代码注入
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return emailRegex.test(email) && email.length <= 100; // 限制长度防止DoS
-    }
-    
-    // QR 码处理（安全版本）
-    document.getElementById('qr-email').addEventListener('click', function () {
-        const qrContainer = document.getElementById('qr-container');
-        qrContainer.classList.toggle('hidden');
+        // 邮箱地址验证函数（防止注入攻击）
+        function validateEmail(email) {
+            // 只允许字母、数字、@、.、-、_字符，防止恶意代码注入
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return emailRegex.test(email) && email.length <= 100; // 限制长度防止DoS
+        }
 
-        if (!qrContainer.classList.contains('hidden')) {
-            // 验证邮箱地址格式，防止恶意注入
-            if (!validateEmail(CONTACT_EMAIL)) {
-                console.error('Invalid email address format');
-                return; // 如果邮箱格式无效，不生成QR码
+        // QR 码处理（安全版本）
+        document.getElementById('qr-email').addEventListener('click', function () {
+            const qrContainer = document.getElementById('qr-container');
+            qrContainer.classList.toggle('hidden');
+
+            if (!qrContainer.classList.contains('hidden')) {
+                // 验证邮箱地址格式，防止恶意注入
+                if (!validateEmail(CONTACT_EMAIL)) {
+                    console.error('Invalid email address format');
+                    return; // 如果邮箱格式无效，不生成QR码
+                }
+
+                // 安全地构建mailto链接（使用硬编码的邮箱地址）
+                const mailtoLink = 'mailto:' + CONTACT_EMAIL;
+
+                // 生成QR码（QRious会自动处理canvas）
+                new QRious({
+                    element: document.getElementById('qr-code'),
+                    value: mailtoLink,
+                    size: 200,
+                });
             }
-            
-            // 安全地构建mailto链接（使用硬编码的邮箱地址）
-            const mailtoLink = 'mailto:' + CONTACT_EMAIL;
-            
-            // 生成QR码（QRious会自动处理canvas）
-            new QRious({
-                element: document.getElementById('qr-code'),
-                value: mailtoLink,
-                size: 200,
+        });
+
+        // 添加页面滚动进度和回到顶部按钮
+        window.addEventListener('scroll', () => {
+            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('progress-bar').style.transform = `scaleX(${scrolled / 100})`;
+
+            // 显示/隐藏回到顶部按钮
+            const scrollToTopBtn = document.getElementById('scroll-to-top');
+            if (window.scrollY > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+
+        // 回到顶部功能
+        document.getElementById('scroll-to-top').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
-        }
-    });
-
-    // 添加页面滚动进度和回到顶部按钮
-    window.addEventListener('scroll', () => {
-        const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-        document.getElementById('progress-bar').style.transform = `scaleX(${scrolled / 100})`;
-        
-        // 显示/隐藏回到顶部按钮
-        const scrollToTopBtn = document.getElementById('scroll-to-top');
-        if (window.scrollY > 300) {
-            scrollToTopBtn.classList.add('visible');
-        } else {
-            scrollToTopBtn.classList.remove('visible');
-        }
-    });
-
-    // 回到顶部功能
-    document.getElementById('scroll-to-top').addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
         });
     });
-});
-</script>
+    </script>
 </body>
 </html>
