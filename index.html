@@ -110,6 +110,11 @@
             transition: transform 0.3s ease;
         }
 
+        /* 仅在中文页面显示,默认隐藏避免加载闪烁 */
+        .cn-only {
+            display: none;
+        }
+
         .social-links li:hover {
             transform: translateY(-5px);
         }
