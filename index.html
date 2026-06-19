@@ -510,6 +510,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="https://no.money" target="_blank" rel="noopener noreferrer" aria-label="no.money">
+                        <img src="./tomi/nomoney.png" alt="no.money" width="40" height="40">
+                        <span class="social-tooltip">no.money</span>
+                    </a>
+                </li>
+                <li class="cn-only">
                     <a href="https://ai800.com" target="_blank" rel="noopener noreferrer" aria-label="ai800">
                         <img src="./tomi/8.png" alt="ai800" width="40" height="40">
                         <span class="social-tooltip">ai800.com</span>
@@ -527,7 +533,7 @@
                         <span class="social-tooltip">即刻News</span>
                     </a>
                 </li>
-                <li>
+                <li class="cn-only">
                     <a href="https://www.zhuji123.com" target="_blank" rel="noopener noreferrer" aria-label="Zhuji123">
                         <img src="./tomi/zhuji.png" alt="Zhuji123" width="40" height="40">
                         <span class="social-tooltip">主机123</span>
@@ -732,6 +738,10 @@
             });
             setMood();
             document.title = d.pageTitle;
+            // 仅在中文页面显示的链接
+            document.querySelectorAll('.cn-only').forEach(el => {
+                el.style.display = currentLang === 'cn' ? '' : 'none';
+            });
         }
 
         // 显示/隐藏菜单
