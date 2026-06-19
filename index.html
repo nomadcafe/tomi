@@ -745,7 +745,7 @@
             document.title = d.pageTitle;
             // 仅在中文页面显示的链接
             document.querySelectorAll('.cn-only').forEach(el => {
-                el.style.display = currentLang === 'cn' ? '' : 'none';
+                el.style.display = currentLang === 'cn' ? 'list-item' : 'none';
             });
         }
 
