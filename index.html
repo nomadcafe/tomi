@@ -207,11 +207,31 @@
             z-index: 1000;
         }
 
+        /* 加载遮罩：JS 就绪后立即隐藏，同时用 CSS 动画兜底，
+           避免脚本报错或外部资源卡住时永远白屏 */
+        #loading-screen {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            animation: loaderOut 0.3s ease 1.2s forwards;
+        }
+
+        #loading-screen.is-hidden {
+            opacity: 0;
+            visibility: hidden;
+            animation: none;
+        }
+
+        @keyframes loaderOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
         /* 动画类 */
         .fade-in {
             opacity: 0;
             transform: translateY(30px);
-            animation: fadeInMove 1.5s ease-out forwards;
+            animation: fadeInMove 0.5s ease-out forwards;
         }
 
         @keyframes fadeInMove {
@@ -228,8 +248,8 @@
         .avatar-enter {
             opacity: 0;
             transform: translateY(100%) scale(0.8);
-            animation: rollIn 1.5s forwards;
-            animation-delay: 0.5s;
+            animation: rollIn 0.5s forwards;
+            animation-delay: 0.05s;
         }
 
         @keyframes rollIn {
@@ -452,21 +472,21 @@
             <img class="rounded-full mx-auto my-6 avatar-enter"
                  src="./tomi/per1.png" alt="Avatar of YT" width="192" height="192" loading="lazy">
 
-            <h1 class="text-gradient mb-4 fade-in" style="animation-delay: 1s;" id="main-title">こんにちは</h1>
+            <h1 class="text-gradient mb-4 fade-in" style="animation-delay: 0.1s;" id="main-title">こんにちは</h1>
             <!-- 今日の気分 动态心情区块 -->
-            <div class="section fade-in" style="animation-delay: 1.1s;">
+            <div class="section fade-in" style="animation-delay: 0.15s;">
                 <h2 class="text-xl font-semibold mb-4" id="mood-title">今日の気分</h2>
                 <div id="mood" class="mb-2 text-lg font-medium"></div>
             </div>
             <!-- 关于我 -->
-            <div class="section fade-in" style="animation-delay: 1.2s;">
+            <div class="section fade-in" style="animation-delay: 0.2s;">
                 <h2 class="text-xl font-semibold mb-4" id="about-title">自己紹介</h2>
                 <p class="mb-3" id="about-1">大阪在住、日本語が苦手です</p>
                 <p class="mb-3" id="about-2">既婚、二児の父。</p>
                 <p class="mb-3" id="about-3">今、仕事を探しています</p>
             </div>
             <!-- 技能标签 -->
-            <div class="section fade-in" style="animation-delay: 1.4s;">
+            <div class="section fade-in" style="animation-delay: 0.25s;">
                 <h2 class="text-xl font-semibold mb-4" id="skills-title">スキルと趣味</h2>
                 <div class="flex flex-wrap justify-center gap-2">
                     <span class="skill-tag" id="skill-1">旅行</span>
@@ -480,7 +500,7 @@
                 </div>
             </div>
             <!-- 联系方式 -->
-            <div class="section fade-in" style="animation-delay: 1.6s;">
+            <div class="section fade-in" style="animation-delay: 0.3s;">
                 <h2 class="text-xl font-semibold mb-4" id="contact-title">連絡先</h2>
                 <button id="qr-email" class="button mb-4">メールQRコード</button>
                 <div id="qr-container" class="hidden mt-4 flex justify-center">
@@ -489,7 +509,7 @@
             </div>
 
             <!-- 社交链接 -->
-            <ul class="social-links fade-in" style="animation-delay: 1.8s;">
+            <ul class="social-links fade-in" style="animation-delay: 0.35s;">
                 <li>
                     <a href="https://keki.ai" target="_blank" rel="noopener noreferrer" aria-label="kekiai">
                         <img src="./tomi/keki.png" alt="kekiai" width="40" height="40">
@@ -569,15 +589,11 @@
     </button>
 
     <!-- 引入 qrious 库 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 
     <script>
-    // 隐藏加载动画
-    window.addEventListener('load', function() {
-        const loading = document.getElementById('loading-screen');
-        loading.style.opacity = '0';
-        setTimeout(() => { loading.style.display = 'none'; }, 300);
-    });
+    // 隐藏加载动画：DOM 就绪即可，不必等 load（图片/CDN 资源不阻塞）
+    document.getElementById('loading-screen').classList.add('is-hidden');
 
     document.addEventListener('DOMContentLoaded', function() {
         // 动态心情内容
@@ -711,6 +727,21 @@
             }
         };
         const langNames = { ja: '日本語', cn: '中文', en: 'English' };
+
+        // 语言优先级：URL ?lang= > 上次选择 > 浏览器语言 > 日语
+        const supported = ['ja', 'cn', 'en'];
+        function detectLang() {
+            const fromUrl = new URLSearchParams(location.search).get('lang');
+            if (supported.includes(fromUrl)) return fromUrl;
+            let saved = null;
+            try { saved = localStorage.getItem('lang'); } catch (err) {}
+            if (supported.includes(saved)) return saved;
+            const nav = ((navigator.languages && navigator.languages[0]) || navigator.language || '').toLowerCase();
+            if (nav.startsWith('zh')) return 'cn';
+            if (nav.startsWith('en')) return 'en';
+            return 'ja';
+        }
+
         let currentLang = 'ja';
         const toggleLangBtn = document.getElementById('toggle-lang');
         const langMenu = document.getElementById('lang-menu');
@@ -772,7 +803,15 @@
         document.querySelectorAll('.lang-option').forEach(opt => {
             opt.onclick = function(e) {
                 e.stopPropagation();
-                setLang(this.dataset.lang);
+                const lang = this.dataset.lang;
+                setLang(lang);
+                // 记住选择，并同步到 URL 方便分享指定语言的页面
+                try {
+                    localStorage.setItem('lang', lang);
+                    const url = new URL(location.href);
+                    url.searchParams.set('lang', lang);
+                    history.replaceState(null, '', url);
+                } catch (err) {}
                 langMenu.classList.add('hidden');
             }
         });
@@ -782,8 +821,8 @@
             langMenu.classList.add('hidden');
         });
 
-        // 页面加载时初始化为日语
-        setLang('ja');
+        // 页面加载时按 URL / 上次选择 / 浏览器语言初始化
+        setLang(detectLang());
 
         // QR 码：点击显示邮箱
         document.getElementById('qr-email').addEventListener('click', function () {
