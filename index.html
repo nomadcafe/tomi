@@ -226,6 +226,45 @@
             background: #f2f3f5;
         }
 
+        /* 項目ごとの小さな進捗バー（progress を持つ項目だけ表示） */
+        .bucket-text {
+            flex: 1;
+        }
+
+        .bucket-meter {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin: 0.42rem 0 0 0.6rem;
+            font-size: 0.72rem;
+            color: var(--text-faint);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .bucket-meter-track {
+            width: 64px;
+            height: 4px;
+            border-radius: 999px;
+            background: var(--line-soft);
+            overflow: hidden;
+        }
+
+        .bucket-meter-track > i {
+            display: block;
+            height: 100%;
+            width: 0;
+            border-radius: 999px;
+            background: var(--brand-gradient-h);
+            transition: width 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @media (max-width: 400px) {
+            .bucket-meter-track {
+                width: 48px;
+            }
+        }
+
         .bucket-mark {
             position: relative;
             flex: 0 0 18px;
@@ -276,7 +315,8 @@
                 transition: none;
             }
 
-            .bucket-bar > i {
+            .bucket-bar > i,
+            .bucket-meter-track > i {
                 transition: none;
             }
         }
@@ -937,9 +977,11 @@
             { done: false, ja: '第三国の永住権を取る',                  cn: '拿到一张第三国家的绿卡',  en: 'Get permanent residency in a third country' },
             { done: false, ja: 'ヨーロッパで暮らす・長期滞在する',    cn: '到欧洲生活或旅居一段时间',en: 'Live or stay in Europe for a while' },
             { done: false, ja: '家族で世界一周する',                    cn: '带全家环游世界一次',      en: 'Travel around the world with my family' },
+            { done: false, ja: 'スキューバダイビングをする',            cn: '参加一次海底潜水',        en: 'Go scuba diving once' },
             { done: false, ja: 'オーロラを見る',                        cn: '看一次极光',              en: 'See the northern lights' },
             { done: false, ja: 'アフリカで動物の大移動を見る',        cn: '去非洲看动物大迁徙',      en: 'See the great migration in Africa' },
-            { done: false, ja: '経済的に自由になる',                    cn: '实现财务自由',            en: 'Reach financial freedom' }
+            // progress: 0〜100 を書くと、その項目に小さな進捗バーが出る
+            { done: false, progress: 1,  ja: '100万ドルの貯金をつくる',    cn: '一百万美元的存款',        en: 'One million dollars in savings' }
         ];
 
         // 已完成的排在前面，其余保持原顺序
@@ -1036,6 +1078,26 @@
                     text.className = 'bucket-text';
                     li.appendChild(mark);
                     li.appendChild(text);
+
+                    if (typeof item.progress === 'number') {
+                        const pct = Math.max(0, Math.min(100, item.progress));
+                        const meter = document.createElement('span');
+                        meter.className = 'bucket-meter';
+                        const track = document.createElement('span');
+                        track.className = 'bucket-meter-track';
+                        const fill = document.createElement('i');
+                        track.appendChild(fill);
+                        const num = document.createElement('span');
+                        num.textContent = pct + '%';
+                        meter.appendChild(track);
+                        meter.appendChild(num);
+                        li.appendChild(meter);
+                        // 追加後に幅を入れて 0 から伸びるアニメーションにする
+                        requestAnimationFrame(function() {
+                            fill.style.width = pct + '%';
+                        });
+                    }
+
                     frag.appendChild(li);
                     return text;
                 });
